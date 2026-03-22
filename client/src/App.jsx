@@ -32,7 +32,7 @@ function App() {
     const fetchProducts = async () => {
       try {
         // Look familiar? We are calling OUR OWN backend now, not TheMealDB!
-        const response = await fetch('http://localhost:3000/api/products');
+        const response = await fetch('https://shopsimple-api.onrender.com/api/products');
         const data = await response.json();
         
         // Save the data to React's memory
@@ -52,7 +52,7 @@ function App() {
   // ==========================================
   const fetchOrders = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/orders');
+      const response = await fetch('https://shopsimple-api.onrender.com/api/orders');
       const data = await response.json();
       setOrders(data);
     } catch (error) {
@@ -109,7 +109,7 @@ function App() {
     try {
       // 1. The POST Request
       // We are sending data UP to the server, so we need extra configuration.
-      const response = await fetch('http://localhost:3000/api/checkout', {
+      const response = await fetch('https://shopsimple-api.onrender.com/api/checkout', {
         method: 'POST', // Tell the server we are pushing data
         headers: {
           'Content-Type': 'application/json', // Tell the server to expect JSON
