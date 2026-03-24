@@ -14,7 +14,8 @@ app.use(express.json());
 // ==========================================
 // UPDATED: BULLETPROOF CLOUD CONNECTION POOL
 // ==========================================
-const db = mysql.createPool({
+// We now pull the credentials safely from process.env
+const db = mysql.createConnection({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
