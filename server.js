@@ -12,26 +12,32 @@ app.use(cors());
 app.use(express.json());
 
 // ==========================================
-// UPDATED: CLOUD DATABASE CONNECTION
+// UPDATED: BULLETPROOF CLOUD CONNECTION POOL
 // ==========================================
-// We now pull the credentials safely from process.env
-const db = mysql.createConnection({
+const db = mysql.createPool({
     host: process.env.DB_HOST,
     port: process.env.DB_PORT,
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     ssl: {
-        rejectUnauthorized: false // CRITICAL: Cloud databases require SSL encryption
-    }
+        rejectUnauthorized: false 
+    },
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0,
+    enableKeepAlive: true,        // CRITICAL FIX: Stops Aiven from dropping the connection
+    keepAliveInitialDelay: 10000  // Pings the cloud every 10 seconds
 });
 
-db.connect((err) => {
+// Test the pool to make sure it connects
+db.getConnection((err, connection) => {
     if (err) {
         console.error("❌ Cloud Database connection failed:", err.message);
         return;
     }
-    console.log("☁️ ✅ Connected to Aiven Cloud MySQL!");
+    console.log("☁️ ✅ Connected to Aiven Cloud MySQL via Bulletproof Pool!");
+    connection.release(); 
 });
 
 // ==========================================
